@@ -457,6 +457,12 @@ reg("T2-PB-cond-R2",    0.500, "checkin", ("education_outcomes.json", "numbers.T
     [(EDU_PRED, 15)])
 reg("T2-PB-n",          828,   "checkin", ("education_outcomes.json", "numbers.T2-PB-n"),
     [(EDU_PRED, 11)], tol=0)
+# Table 2 values surfaced by coverage scan
+reg("T2-TFR-beta-abs",  0.032, "derived",
+    "abs(T2-TFR-beta) — paper reports absolute value",
+    [EDU_PRED], tol=0.001)
+reg("T2-LE-beta-sec",   0.109, "checkin", ("education_outcomes.json", "numbers.T2-LE-beta"),
+    [EDU_PRED], tol=0.001)
 # Forward R² symmetry
 
 # ══════════════════════════════════════════════════════════════════════════
@@ -469,13 +475,13 @@ reg("LR-countries", 28,     "checkin", ("long_run_generational.json", "numbers.L
 # PARENTAL INCOME COLLAPSE — inline computation
 # ══════════════════════════════════════════════════════════════════════════
 reg("PI-alone-beta",  15.4,  "checkin", ("table_1_main.json", "numbers.PI-alone-beta"),
-    [(GDP_INDEP, 127)], tol=0.5)
+    [(GDP_INDEP, 33)], tol=0.5)
 reg("PI-alone-R2",    0.293, "checkin", ("table_1_main.json", "numbers.PI-alone-R2"),
-    [(GDP_INDEP, 127)])
+    [(GDP_INDEP, 12)])
 reg("PI-cond-beta",   4.3,   "checkin", ("table_1_main.json", "numbers.PI-cond-beta"),
-    [(GDP_INDEP, 128)], tol=0.5)
+    [(GDP_INDEP, 20)], tol=0.5)
 reg("PI-cond-p",      0.04,  "checkin", ("table_1_main.json", "numbers.PI-cond-p"),
-    [(GDP_INDEP, 129)], tol=0.01)
+    [(GDP_INDEP, 12)], tol=0.01)
 reg("PI-edu-alone",   0.553, "checkin", ("table_1_main.json", "numbers.PI-edu-alone"),
     [(GDP_INDEP, 12)])
 
@@ -528,19 +534,19 @@ reg("Singapore-1995-edu", 94.0, "wcde", ("cohort_lower_sec_both.csv", "Singapore
 # Table 3 GDP values (2015, constant 2017 USD)
 
 # Korea-Costa Rica comparison (Section 9)
-reg("GDP-Korea-1960",     1038,  "wdi", ("gdp", "Korea", 1960), [], tol=200)
-reg("GDP-CostaRica-1960", 3609,  "wdi", ("gdp", "Costa Rica", 1960), [], tol=500)
-reg("GDP-Korea-1990",     9673,  "wdi", ("gdp", "Korea", 1990), [], tol=500)
-reg("GDP-CostaRica-1990", 6037,  "wdi", ("gdp", "Costa Rica", 1990), [], tol=500)
+reg("GDP-Korea-1960",     1038,  "wdi", ("gdp", "Korea", 1960), [], tol=5)
+reg("GDP-CostaRica-1960", 3609,  "wdi", ("gdp", "Costa Rica", 1960), [], tol=5)
+reg("GDP-Korea-1990",     9673,  "wdi", ("gdp", "Korea", 1990), [], tol=5)
+reg("GDP-CostaRica-1990", 6037,  "wdi", ("gdp", "Costa Rica", 1990), [], tol=5)
 
 # Other GDP mentions
 
 # Philippines/Korea/Thailand/Indonesia/India/China GDP 1960 comparison (Section 9)
-reg("GDP-Philippines-1960", 1124, "wdi", ("gdp", "Philippines", 1960), [(POLICY, None)], tol=200)
-reg("GDP-Thailand-1960",    592, "wdi", ("gdp", "Thailand", 1960), [(POLICY, 20)], tol=200)
-reg("GDP-Indonesia-1960",   598, "wdi", ("gdp", "Indonesia", 1960), [(POLICY, 21)], tol=200)
-reg("GDP-India-1960",       313, "wdi", ("gdp", "India", 1960), [(POLICY, 21)], tol=200)
-reg("GDP-China-1960",       241, "wdi", ("gdp", "China", 1960), [(POLICY, 21)], tol=200)
+reg("GDP-Philippines-1960", 1124, "wdi", ("gdp", "Philippines", 1960), [(POLICY, None)], tol=5)
+reg("GDP-Thailand-1960",    592, "wdi", ("gdp", "Thailand", 1960), [(POLICY, 20)], tol=5)
+reg("GDP-Indonesia-1960",   598, "wdi", ("gdp", "Indonesia", 1960), [(POLICY, 21)], tol=5)
+reg("GDP-India-1960",       313, "wdi", ("gdp", "India", 1960), [(POLICY, 21)], tol=5)
+reg("GDP-China-1960",       241, "wdi", ("gdp", "China", 1960), [(POLICY, 21)], tol=5)
 # Note: Korea 1960 already registered above as GDP-Korea-1960
 
 # ══════════════════════════════════════════════════════════════════════════
@@ -579,9 +585,9 @@ reg("T3-Bangladesh-resid",  15.8, "checkin",
 reg("T3-India-resid",       14.1, "checkin",
     ("regression_tables.json", "country_residuals.T3-India-resid"),
     [OVERPERF], tol=0.5)
-reg("T3-Qatar-resid",       3.7,  "derived",
+reg("T3-Qatar-resid",       4.8,  "derived",
     "abs(country_residuals.T3-Qatar-resid) — paper reports absolute value",
-    [INSTIT], tol=1.5)  # JSON has -4.8, paper says 3.7 — different spec or rounding
+    [INSTIT], tol=0.1)
 
 # ══════════════════════════════════════════════════════════════════════════
 # DERIVED VALUES — computed from other verified numbers
@@ -593,14 +599,97 @@ reg("PI-drop-pct",   72.0,   "derived", "1 - PI-cond-beta/PI-alone-beta",
 reg("CostaRica-1.7fold", 1.7, "derived", "GDP-CostaRica-1990 / GDP-CostaRica-1960",
     [], tol=0.3)
 
-# Table 4 "Generations" column: ceil(lag / 25), interpretive rounding
-# Lag values are approximate; Generations = nearest integer of ~25-year cycles
+# Table 5 Generations column (rate_predicts_crossing.json)
+reg("T5-gen-Taiwan",      1, "checkin",
+    ("rate_predicts_crossing.json", "Taiwan.generations"),
+    [SEN_CASES], tol=0)
+reg("T5-gen-Korea",       1, "checkin",
+    ("rate_predicts_crossing.json", "Korea.generations"),
+    [SEN_CASES], tol=0)
+reg("T5-gen-Cuba",        1, "checkin",
+    ("rate_predicts_crossing.json", "Cuba.generations"),
+    [SEN_CASES], tol=0)
+reg("T5-gen-Bangladesh",  1, "checkin",
+    ("rate_predicts_crossing.json", "Bangladesh.generations"),
+    [SEN_CASES], tol=0)
+reg("T5-gen-SriLanka",    2, "checkin",
+    ("rate_predicts_crossing.json", "Sri Lanka.generations"),
+    [SEN_CASES], tol=0)
+reg("T5-gen-China",       2, "checkin",
+    ("rate_predicts_crossing.json", "China.generations"),
+    [SEN_CASES], tol=0)
+reg("T5-gen-Kerala",      3, "checkin",
+    ("rate_predicts_crossing.json", "Kerala.generations"),
+    [SEN_CASES], tol=0)
 
-# Table A4 shift ranges (min and max across 5 cases)
+# Table A4 shift ranges (min and max across cases incl. Taiwan)
+reg("threshold-shift-min", 10, "checkin",
+    ("threshold_robustness.json", "results.Taiwan.shift"),
+    ["defining-development"], tol=0)
+reg("threshold-shift-max", 30, "checkin",
+    ("threshold_robustness.json", "results.Sri Lanka.shift"),
+    ["defining-development"], tol=0)
 
 # Table A4 individual shift values
+reg("threshold-shift-Cuba",       16, "checkin",
+    ("threshold_robustness.json", "results.Cuba.shift"),
+    ["defining-development"], tol=0)
+reg("threshold-shift-Korea",      15, "checkin",
+    ("threshold_robustness.json", "results.South Korea.shift"),
+    ["defining-development"], tol=0)
+reg("threshold-shift-China",      19, "checkin",
+    ("threshold_robustness.json", "results.China.shift"),
+    ["defining-development"], tol=0)
+reg("threshold-shift-Bangladesh", 14, "checkin",
+    ("threshold_robustness.json", "results.Bangladesh.shift"),
+    ["defining-development"], tol=0)
 
-# Table A4 threshold variants (aligned with fig_threshold_sensitivity.py)
+# Table A4 crossing years under each spec (threshold_robustness.json)
+reg("A4-Cuba-loose",       1964, "checkin",
+    ("threshold_robustness.json", "results.Cuba.loose"),
+    [APPENDIX_ROBUST], tol=0)
+reg("A4-Cuba-main",        1974, "checkin",
+    ("threshold_robustness.json", "results.Cuba.main"),
+    [APPENDIX_ROBUST], tol=0)
+reg("A4-Cuba-strict",      1980, "checkin",
+    ("threshold_robustness.json", "results.Cuba.strict"),
+    [APPENDIX_ROBUST], tol=0)
+reg("A4-Korea-loose",      1978, "checkin",
+    ("threshold_robustness.json", "results.South Korea.loose"),
+    [APPENDIX_ROBUST], tol=0)
+reg("A4-Korea-main",       1987, "checkin",
+    ("threshold_robustness.json", "results.South Korea.main"),
+    [APPENDIX_ROBUST], tol=0)
+reg("A4-Korea-strict",     1993, "checkin",
+    ("threshold_robustness.json", "results.South Korea.strict"),
+    [APPENDIX_ROBUST], tol=0)
+reg("A4-SriLanka-loose",   1975, "checkin",
+    ("threshold_robustness.json", "results.Sri Lanka.loose"),
+    [APPENDIX_ROBUST], tol=0)
+reg("A4-SriLanka-main",    1993, "checkin",
+    ("threshold_robustness.json", "results.Sri Lanka.main"),
+    [APPENDIX_ROBUST], tol=0)
+reg("A4-SriLanka-strict",  2005, "checkin",
+    ("threshold_robustness.json", "results.Sri Lanka.strict"),
+    [APPENDIX_ROBUST], tol=0)
+reg("A4-China-loose",      1982, "checkin",
+    ("threshold_robustness.json", "results.China.loose"),
+    [APPENDIX_ROBUST], tol=0)
+reg("A4-China-main",       1994, "checkin",
+    ("threshold_robustness.json", "results.China.main"),
+    [APPENDIX_ROBUST], tol=0)
+reg("A4-China-strict",     2001, "checkin",
+    ("threshold_robustness.json", "results.China.strict"),
+    [APPENDIX_ROBUST], tol=0)
+reg("A4-Bangladesh-loose",  2005, "checkin",
+    ("threshold_robustness.json", "results.Bangladesh.loose"),
+    [APPENDIX_ROBUST], tol=0)
+reg("A4-Bangladesh-main",   2014, "checkin",
+    ("threshold_robustness.json", "results.Bangladesh.main"),
+    [APPENDIX_ROBUST], tol=0)
+reg("A4-Bangladesh-strict", 2019, "checkin",
+    ("threshold_robustness.json", "results.Bangladesh.strict"),
+    [APPENDIX_ROBUST], tol=0)
 
 # pp/yr rates for other countries (derived from WCDE data)
 reg("Bangladesh-ppyr", 1.30, "derived", "Bangladesh edu rate 1990-2020",
@@ -664,6 +753,69 @@ reg("College-LE-low",      73.9,"checkin", ("college_le_gradient.json", "results
     [], tol=0.1)
 reg("College-LE-high",     79.6,"checkin", ("college_le_gradient.json", "results.q4_le.actual"),
     [], tol=0.1)
+
+# Table 3 residualized values (surfaced by coverage scan fix)
+reg("T3-LE-raw-gdp-r2",    0.165, "checkin",
+    ("regression_tables.json", "results.LE.90.GDP (raw).r2"),
+    [GDP_INDEP], tol=0.005)
+reg("T3-LE-resid-r2",      0.003, "checkin",
+    ("regression_tables.json", "results.LE.90.GDP (residualized).r2"),
+    [GDP_INDEP], tol=0.005)
+reg("T3-TFR-raw-gdp-r2",   0.175, "checkin",
+    ("regression_tables.json", "results.TFR.90.GDP (raw).r2"),
+    [GDP_INDEP], tol=0.005)
+reg("T3-TFR-resid-p",      0.98, "checkin",
+    ("regression_tables.json", "results.TFR.90.GDP (residualized).pval"),
+    [GDP_INDEP], tol=0.02)
+reg("T3-U5MR-resid-r2",    0.023, "checkin",
+    ("regression_tables.json", "results.U5MR.90.GDP (residualized).r2"),
+    [GDP_INDEP], tol=0.005)
+reg("T3-U5MR-resid-p",     0.11, "checkin",
+    ("regression_tables.json", "results.U5MR.90.GDP (residualized).pval"),
+    [GDP_INDEP], tol=0.02)
+# Inline text: "Residualized GDP R² never exceeds 0.023" (L1132)
+# Same value as T3-U5MR-resid-r2, registered above for this section
+# Inline: "below 0.003 for LE and fertility" and "U5MR reaches 0.023"
+reg("resid-gdp-r2-le-tfr-max", 0.003, "derived",
+    "Max resid GDP R² across lags for LE/TFR at ceil90 (lag_sensitivity.json)",
+    [GDP_INDEP], tol=0.001)
+reg("resid-gdp-r2-u5mr-max",   0.023, "derived",
+    "Max resid GDP R² across lags for U5MR at ceil90 (lag_sensitivity.json)",
+    [GDP_INDEP], tol=0.005)
+# Parental income R² = 0.014 (L1213) — joint model R² minus edu-alone R²
+reg("PI-cond-R2",           0.014, "checkin",
+    ("table_1_main.json", "numbers.PI-cond-R2"),
+    [GDP_INDEP], tol=0.005)
+
+# Grandmother effect betas at low education (L1055, L1057)
+reg("GM-TFR-low-beta-gm",  0.059, "derived",
+    "abs(grandmother_effect.json results.tfr_low_edu.mother_gm.beta_grandmother_edu)",
+    [EDU_PRED], tol=0.005)
+reg("GM-TFR-low-beta-m",   0.033, "derived",
+    "abs(grandmother_effect.json results.tfr_low_edu.mother_gm.beta_mother_edu)",
+    [EDU_PRED], tol=0.005)
+
+# GDP per capita 1.2% per pp (L983) — from education_outcomes.json
+reg("T2-GDP-beta-pct",     1.2, "derived",
+    "T2-GDP-beta (0.012) × 100 = 1.2% per pp",
+    [EDU_PRED], tol=0.1)
+# GDP explains 1.6% at <10% cutoff (L994) — from edu_vs_gdp_entry_threshold
+reg("GDP-r2-below10-pct",  1.6, "derived",
+    "cutoff_10_gdp_r2 from edu_vs_gdp_by_cutoff = 0.296, but paper text says 1.6% for LE-specific",
+    [EDU_PRED], tol=0.5)
+# GDP R² 0.3 high end of cutoff range (L818)
+reg("GDP-r2-cutoff-high",  0.3, "checkin",
+    ("education_vs_gdp_by_cutoff.json", "numbers.cutoff_10_gdp_r2"),
+    [EDU_VS_GDP], tol=0.01)
+
+# China p-value 0.78 (L1501)
+reg("China-LE-break-p",    0.78, "checkin",
+    ("china_mean_yrs_vs_peers.json", "structural_break_1981.le.p_break_slope"),
+    [CHINA], tol=0.01)
+
+# Spain 0.3% completion (L1602)
+reg("Spain-1900-edu",      0.3, "wcde", ("cohort_lower_sec_both.csv", "Spain", 1900),
+    [POLICY], tol=0.1)
 
 # ══════════════════════════════════════════════════════════════════════════
 # TABLE 2b — Residualized GDP (regression_tables.py)
@@ -812,6 +964,9 @@ reg("College-r-sec",         0.45,  "checkin", ("college_le_gradient.json", "res
 # REMOVED from paper
 # REMOVED from paper
 reg("College-LE-gradient-sec", 5.7, "checkin", ("college_le_gradient.json", "results.gradient.actual"), [GDP_INDEP], tol=0.1)
+
+# --- INVISIBLE section: happiness country count ---
+reg("Happiness-n-countries",  147,  "checkin", ("happiness_education.json", "numbers.n_countries"), [INVISIBLE], tol=0)
 
 # --- HOW_EDU section: Nepal GDP + Myanmar data (L549, L581-L584) ---
 # REMOVED from paper
@@ -984,7 +1139,7 @@ reg("Cambodia-1995-sec",     35.1,   "wcde", ("lower_sec_both.csv", "Cambodia", 
 
 # --- INSTIT section (L1647-L1648) ---
 reg("GDP-Qatar-2015-sec",    69000,  "wdi", ("gdp", "Qatar", 2015), [INSTIT], tol=5000)
-reg("T3-Qatar-resid-sec",     3.7,   "derived", "Section dup of T3-Qatar-resid", [INSTIT], tol=1.5)
+reg("T3-Qatar-resid-sec",     4.8,   "derived", "Section dup of T3-Qatar-resid", [INSTIT], tol=0.1)
 
 # --- INSTIT section: India vs China comparison ---
 reg("China-instit-75",        75,    "wcde", ("lower_sec_both.csv", "China", 1990), [INSTIT], tol=1)
@@ -1423,12 +1578,6 @@ def _myanmar_ppyr(m):
         return (m15 - m60) / 55.0
 
 
-def _u5mr_post2000_resid_pct(m):
-    r2 = m.get("U5MR-post2000-resid-r2", {}).get("actual")
-    if r2 is not None:
-        return r2 * 100
-
-
 def _cr_korea_ratio(m):
     cr60 = m.get("GDP-CostaRica-1960", {}).get("actual")
     k60 = m.get("GDP-Korea-1960", {}).get("actual")
@@ -1516,60 +1665,6 @@ def _global_rate(period_name):
             pass
     return _fn
 
-def _gm_child_edu_r2_gain(m):
-    try:
-        gm = load_checkin("grandmother_effect.json",
-                          "results.child_edu.r2_gain")
-        if gm is not None:
-            return gm * 100
-    except Exception:
-        pass
-
-def _gm_le_r2_gain(m):
-    try:
-        gm = load_checkin("grandmother_effect.json",
-                          "results.le.r2_gain")
-        if gm is not None:
-            return gm * 100
-    except Exception:
-        pass
-
-def _u5mr_pre2000_resid_pct(m):
-    r2 = m.get("U5MR-pre2000-resid-r2", {}).get("actual")
-    if r2 is not None:
-        return r2 * 100
-
-def _colonial_era_edu_r2(m):
-    try:
-        r2 = load_checkin("colonial_education_vs_institutions.json",
-                          "r2_colonial_education")
-        if r2 is not None:
-            return round(r2 * 100)
-    except Exception:
-        pass
-
-def _le_lt10_edu_r2_pct(m):
-    r2 = m.get("LE-lt10-edu-r2", {}).get("actual")
-    if r2 is not None:
-        return round(r2 * 100)
-
-def _beta_cutoff_r2_pct(cutoff):
-    """Factory: returns a function for beta cutoff R2 percentages."""
-    def _fn(m):
-        try:
-            r2 = load_checkin("beta_by_ceiling_cutoff.json",
-                              f"numbers.panelA_cutoff_{cutoff}_r2")
-            if r2 is not None:
-                return round(r2 * 100)
-        except Exception:
-            pass
-    return _fn
-
-def _russia_99_cumulative(m):
-    primary = m.get("Russia-1990-edu", {}).get("actual")
-    if primary is not None:
-        return primary
-
 def _cambodia_peer_median(year):
     """Factory: returns a function for Cambodia peer median lookups."""
     def _fn(m):
@@ -1586,76 +1681,124 @@ def _cambodia_peer_median(year):
             pass
     return _fn
 
-def _t3_qatar_resid(m):
-    try:
-        r = load_checkin("regression_tables.json",
-                         "country_residuals.T3-Qatar-resid")
-        if r is not None:
-            return abs(r)
-    except Exception:
-        pass
-
-def _forward(primary_name):
-    """Factory: returns a function that forwards from a primary entry."""
+def _resid_gdp_r2_lag_max(outcomes_filter):
+    """Factory: max resid GDP R² across lags at ceil90, filtered by outcome."""
     def _fn(m):
-        return m.get(primary_name, {}).get("actual")
+        try:
+            d = json.load(open(os.path.join(CHECKIN, "lag_sensitivity.json")))
+            max_r2 = 0
+            for lag in d["results"]:
+                for outcome, vals in d["results"][lag].items():
+                    if "ceil90" in outcome and any(f in outcome for f in outcomes_filter):
+                        r = vals.get("resid_gdp_r2", 0)
+                        if r > max_r2:
+                            max_r2 = r
+            return max_r2
+        except Exception:
+            pass
     return _fn
+
+
+# ── Generic factories ────────────────────────────────────────────────────
+
+def _abs_checkin(json_file, path):
+    """Factory: abs(value) from a checkin JSON."""
+    def _fn(m):
+        try:
+            r = load_checkin(json_file, path)
+            if r is not None:
+                return abs(r)
+        except Exception:
+            pass
+    return _fn
+
+def _pct_of(primary_name):
+    """Factory: primary entry's actual value × 100."""
+    def _fn(m):
+        v = m.get(primary_name, {}).get("actual")
+        if v is not None:
+            return v * 100
+    return _fn
+
+def _pct_checkin(json_file, path, rounding=None):
+    """Factory: value from checkin JSON × 100."""
+    def _fn(m):
+        try:
+            r = load_checkin(json_file, path)
+            if r is not None:
+                v = r * 100
+                return round(v, rounding) if rounding is not None else (round(v) if abs(v) >= 1 else v)
+        except Exception:
+            pass
+    return _fn
+
+
+# ── Section duplicates ───────────────────────────────────────────────────
+# Entries whose actual value is forwarded from a primary entry.
+SECTION_DUPS = {
+    "Korea-ppyr-sec":              "Korea-ppyr",
+    "India-ppyr-sec":              "India-ppyr",
+    "Bangladesh-ppyr-sec":         "Bangladesh-ppyr",
+    "PI-drop-pct-sec":             "PI-drop-pct",
+    "China-CR-gain-1975-sec":      "China-CR-gain-1975",
+    "CR-Korea-ratio-sec":          "CR-Korea-ratio",
+    "CostaRica-1.7fold-sec":       "CostaRica-1.7fold",
+    "T3-Bangladesh-resid-sec":     "T3-Bangladesh-resid",
+    "T3-Bangladesh-resid-sec2":    "T3-Bangladesh-resid",
+    "T3-Maldives-resid-sec":      "T3-Maldives-resid",
+    "T3-CapeVerde-resid-sec":     "T3-CapeVerde-resid",
+    "T3-Bhutan-resid-sec":        "T3-Bhutan-resid",
+    "T3-Tunisia-resid-sec":       "T3-Tunisia-resid",
+    "T3-Nepal-resid-sec":         "T3-Nepal-resid",
+    "T3-India-resid-sec":         "T3-India-resid",
+    "T3-Qatar-resid-sec":         "T3-Qatar-resid",
+    "Russia-99-cumulative":       "Russia-1990-edu",
+}
 
 
 # ── Dispatch map ─────────────────────────────────────────────────────────
 DERIVED_DISPATCH = {
-    # Core derived computations
+    # Rate computations (from WCDE data)
     "Korea-ppyr":             _korea_ppyr,
-    "PI-drop-pct":            _pi_drop_pct,
-    "CostaRica-1.7fold":      _costarica_1_7fold,
     "Bangladesh-ppyr":        _bangladesh_ppyr,
     "India-ppyr":             _india_ppyr,
     "Myanmar-ppyr":           _myanmar_ppyr,
-    "U5MR-post2000-resid-pct": _u5mr_post2000_resid_pct,
-    "CR-Korea-ratio":         _cr_korea_ratio,
-    "China-CR-gain-1975":     _china_cr_gain_1975,
-    "China-LE-gap-1965":      _china_le_gap_1965,
-    "China-LE-gap-1980":      _china_le_gap_1980,
-    "Realloc-advantage-pct":  _realloc_advantage_pct,
-    # T4 generational depths
-    # Institutional expansion rates
     "China-instit-rate":      _china_instit_rate,
     "India-instit-rate":      _india_instit_rate,
-    # Global expansion rates
     "Global-rate-1950-75":    _global_rate("Global-rate-1950-75"),
     "Global-rate-1975-00":    _global_rate("Global-rate-1975-00"),
     "Global-rate-2000-15":    _global_rate("Global-rate-2000-15"),
-    # Grandmother effect R2 gains
-    "GM-child-edu-r2-gain":   _gm_child_edu_r2_gain,
-    "GM-le-r2-gain":          _gm_le_r2_gain,
-    # U5MR pre-2000 residual percentage
-    "U5MR-pre2000-resid-pct": _u5mr_pre2000_resid_pct,
-    # Colonial-era education R2 percentage
-    "Colonial-era-edu-r2":    _colonial_era_edu_r2,
-    # Education R2 at <10% cutoff percentage
-    "LE-lt10-edu-r2-pct":     _le_lt10_edu_r2_pct,
-    # Beta cutoff R2 percentages
-    "Beta-cutoff-50-r2-pct":  _beta_cutoff_r2_pct(50),
-    "Beta-cutoff-90-r2-pct":  _beta_cutoff_r2_pct(90),
-    # Russia 99% cumulative restatement
-    "Russia-99-cumulative":   _russia_99_cumulative,
+    "China-CR-gain-1975":     _china_cr_gain_1975,
+    # Ratios from other verified values
+    "PI-drop-pct":            _pi_drop_pct,
+    "CostaRica-1.7fold":      _costarica_1_7fold,
+    "CR-Korea-ratio":         _cr_korea_ratio,
+    "Realloc-advantage-pct":  _realloc_advantage_pct,
+    # Abs of checkin values (paper reports absolute, JSON stores signed)
+    "T3-Qatar-resid":         _abs_checkin("regression_tables.json", "country_residuals.T3-Qatar-resid"),
+    "T2-TFR-beta-abs":        _abs_checkin("education_outcomes.json", "numbers.T2-TFR-beta"),
+    "GM-TFR-low-beta-gm":    _abs_checkin("grandmother_effect.json", "results.tfr_low_edu.mother_gm.beta_grandmother_edu"),
+    "GM-TFR-low-beta-m":     _abs_checkin("grandmother_effect.json", "results.tfr_low_edu.mother_gm.beta_mother_edu"),
+    "China-LE-gap-1965":      _abs_checkin("china_mean_yrs_vs_peers.json", "key_data_points.le_gap_1965"),
+    "China-LE-gap-1980":      _abs_checkin("china_mean_yrs_vs_peers.json", "key_data_points.le_gap_1980"),
+    # Percentages: checkin R² × 100
+    "GM-child-edu-r2-gain":   _pct_checkin("grandmother_effect.json", "results.child_edu.r2_gain"),
+    "GM-le-r2-gain":          _pct_checkin("grandmother_effect.json", "results.le.r2_gain", rounding=1),
+    "Colonial-era-edu-r2":    _pct_checkin("colonial_education_vs_institutions.json", "r2_colonial_education"),
+    "T2-GDP-beta-pct":        _pct_checkin("education_outcomes.json", "numbers.T2-GDP-beta", rounding=1),
+    "GDP-r2-below10-pct":     _pct_checkin("edu_vs_gdp_predicts_le.json", "numbers.lt10.gdp_r2", rounding=1),
+    # Percentages: other verified entry × 100
+    "U5MR-post2000-resid-pct": _pct_of("U5MR-post2000-resid-r2"),
+    "U5MR-pre2000-resid-pct":  _pct_of("U5MR-pre2000-resid-r2"),
+    "LE-lt10-edu-r2-pct":      _pct_of("LE-lt10-edu-r2"),
+    "Beta-cutoff-50-r2-pct":  _pct_checkin("beta_by_ceiling_cutoff.json", "numbers.panelA_cutoff_50_r2"),
+    "Beta-cutoff-90-r2-pct":  _pct_checkin("beta_by_ceiling_cutoff.json", "numbers.panelA_cutoff_90_r2"),
+    # Lag sensitivity max scans
+    "resid-gdp-r2-le-tfr-max": _resid_gdp_r2_lag_max(["LE", "TFR"]),
+    "resid-gdp-r2-u5mr-max":   _resid_gdp_r2_lag_max(["U5MR"]),
     # Cambodia peer medians
     "Cambodia-peer-median-1985": _cambodia_peer_median(1985),
     "Cambodia-peer-median-2015": _cambodia_peer_median(2015),
-    # Qatar residual (absolute value)
-    "T3-Qatar-resid":         _t3_qatar_resid,
-    # Lag robustness bounds
-    # Section duplicates
-    "Korea-ppyr-sec":              _forward("Korea-ppyr"),
-    "India-ppyr-sec":              _forward("India-ppyr"),
-    "Bangladesh-ppyr-sec":         _forward("Bangladesh-ppyr"),
-    "PI-drop-pct-sec":             _forward("PI-drop-pct"),
-    "China-CR-gain-1975-sec":      _forward("China-CR-gain-1975"),
-    "CR-Korea-ratio-sec":          _forward("CR-Korea-ratio"),
-    "CostaRica-1.7fold-sec":       _forward("CostaRica-1.7fold"),
-    # China peer LE gains (section duplicates)
-    # T3 Bangladesh residual sec2
-    "T3-Bangladesh-resid-sec2":    _forward("T3-Bangladesh-resid"),
 }
 
 _LAG_ROBUST_NAMES = set()  # no upper-bound claims currently registered
@@ -1769,10 +1912,20 @@ def main():
             continue
         name = entry["name"]
 
+        # Section duplicates: forward from primary entry
+        if name in SECTION_DUPS:
+            primary = SECTION_DUPS[name]
+            entry["actual"] = entry_map.get(primary, {}).get("actual")
+            if entry["actual"] is not None:
+                if abs(entry["actual"] - entry["value"]) <= entry["tol"]:
+                    entry["status"] = "PASS"
+                else:
+                    entry["status"] = "FAIL"
+            else:
+                entry["status"] = "MISSING"
+            continue
+
         fn = DERIVED_DISPATCH.get(name)
-        if fn is None and name.startswith("T3-") and name.endswith("-sec"):
-            # T3 residual section duplicates: strip "-sec" and forward
-            fn = _forward(name[:-4])
         if fn:
             entry["actual"] = fn(entry_map)
 
@@ -1857,7 +2010,7 @@ def main():
         0.1429,       # LaTeX table column fraction (1/7) in longtable format
         0.4, 0.5, 1.5,  # LaTeX formatting: headrulewidth, titleformat spacing, vspace
         85,            # education threshold (>85% lower-sec) — structural cutoff
-        970, 973, 974, 981, 982,  # year fragments from \textasciitilde19XX
+        # 970, 973, 974, 981, 982 — no longer needed: \textasciitilde is now stripped
         1560, 1696, 1723, 1776,
         400, 500, 600,
         95,             # 95% confidence interval — methodological constant
@@ -1881,6 +2034,8 @@ def main():
         """Extract candidate empirical numbers from a paper line."""
         clean = line.replace("**", "").replace("*", "").replace("|", " ")
         clean = clean.replace("\u2212", "-").replace("\u2248", "~")
+        # Strip \textasciitilde so numbers after ~ are visible to the regex
+        clean = clean.replace("\\textasciitilde", "~")
         # Parenthetical citations: (Author 2004), (Author et al. 2008; Other 2010)
         clean = re.sub(r'\([^)]*\d{4}[^)]*\)', '', clean)
         # Inline code spans
@@ -1925,8 +2080,6 @@ def main():
                 if val == 0:
                     return True
             elif abs(val - reg_val) / max(abs(reg_val), 0.001) < 0.15:
-                return True
-            elif abs(val - reg_val) < 1.0:
                 return True
         return False
 
